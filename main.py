@@ -1,4 +1,4 @@
-﻿import socket
+import socket
 import time
 import threading
 from kivy.app import App
@@ -148,8 +148,8 @@ class AirMouseClientApp(App):
         from jnius import PythonJavaClass, java_method
         activity = PythonActivity.mActivity
         self._sensor_manager = activity.getSystemService(Context.SENSOR_SERVICE)
-        self._game_rotation_sensor = self._sensor_manager.getDefaultSensor(19)  # TYPE_GAME_ROTATION_VECTOR = 20? 15? Use 15 for GAME_ROTATION
-        # TYPE_GAME_ROTATION_VECTOR = 20, TYPE_ROTATION_VECTOR = 11
+        self._game_rotation_sensor = self._sensor_manager.getDefaultSensor(15)  # TYPE_GAME_ROTATION_VECTOR
+        # TYPE_GAME_ROTATION_VECTOR = 15, TYPE_ROTATION_VECTOR = 11
         # Try GAME_ROTATION_VECTOR first, fallback to ROTATION_VECTOR
         if self._game_rotation_sensor is None:
             self._game_rotation_sensor = self._sensor_manager.getDefaultSensor(11)

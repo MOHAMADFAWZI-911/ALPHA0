@@ -14,7 +14,7 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y unzip libffi-dev libssl-dev zip zlib1g-dev autoconf automake libtool pkg-config
+          sudo apt-get install -y unzip libffi-dev libssl-dev libltdl-dev zip zlib1g-dev autoconf automake libtool pkg-config
       - name: Set up Java
         uses: actions/setup-java@v5
         with:
