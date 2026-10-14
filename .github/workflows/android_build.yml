@@ -1,65 +1,30 @@
-name: Android APK Build
+﻿name: Android APK Build
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
   pull_request:
-    branches:
-      - main
+    branches: [main]
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
-      # Step 1: Check out the repository
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      # Step 2: Install dependencies
+      - uses: actions/checkout@v4
       - name: Install dependencies
         run: |
           sudo apt update
-          sudo apt install -y \
-            python3-dev \
-            python3-pip \
-            openjdk-11-jdk \
-            unzip \
-            libffi-dev \
-            libssl-dev \
-            git \
-            zip \
-            zlib1g-dev
-
-      # Step 3: Set up Python
-      - name: Set up Python
-        uses: actions/setup-python@v5
+          sudo apt install -y python3-dev python3-pip openjdk-17-jdk unzip libffi-dev libssl-dev git zip zlib1g-dev autoconf automake libtool pkg-config
+      - uses: actions/setup-python@v5
         with:
-          python-version: "3.8"
-
-      # Step 4: Install Buildozer
+          python-version: "3.11"
       - name: Install Buildozer
         run: |
           pip install --upgrade pip
-          pip install buildozer cython==0.29.33
-
-      # Step 5: Ensure build directory exists
-      - name: Ensure Build Directory
-        run: |
-          if [ ! -f buildozer.spec ]; then
-            echo "buildozer.spec not found!"
-            exit 1
-          fi
-
-      # Step 6: Build APK
+          pip install buildozer cython==0.29.36
       - name: Build APK
-        run: |
-          buildozer -v android debug
-
-      # Step 7: Upload the APK artifact
-      - name: Upload APK
-        uses: actions/upload-artifact@v4
+        run: buildozer -v android debug
+      - uses: actions/upload-artifact@v4
         with:
           name: AirMouse-APK
           path: bin/*.apk
