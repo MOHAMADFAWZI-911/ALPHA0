@@ -25,15 +25,42 @@ jobs:
       - name: Accept Android SDK licenses
         run: |
           mkdir -p ~/.android/licenses
-          echo "8933bad161af4178b1185d1a37fbf41ea5269c55" > ~/.android/licenses/android-sdk-license
-          echo "d56f5187479451eabf01fb78af6dfcb131a6481e" > ~/.android/licenses/android-sdk-preview-license
-          echo "24333f8a63b6825ea9c5514f83c2829b004d1fee" > ~/.android/licenses/android-sdk-preview-license
+          printf "8933bad161af4178b1185d1a37fbf41ea5269c55\nd56f5187479451eabf01fb78af6dfcb131a6481e\n24333f8a63b6825ea9c5514f83c2829b004d1fee\n601085b94cd77f0b54ff86406957099ebe79c4d6\n" > ~/.android/licenses/android-sdk-license
+          printf "8933bad161af4178b1185d1a37fbf41ea5269c55\nd56f5187479451eabf01fb78af6dfcb131a6481e\n24333f8a63b6825ea9c5514f83c2829b004d1fee\n601085b94cd77f0b54ff86406957099ebe79c4d6\n" > ~/.android/licenses/android-sdk-preview-license
+          cat ~/.android/licenses/android-sdk-license
+          # Also pre-create for buildozer SDK location (will be overwritten but ensures dir exists)
           mkdir -p $HOME/.buildozer/android/platform/android-sdk/licenses
-          echo "8933bad161af4178b1185d1a37fbf41ea5269c55" > $HOME/.buildozer/android/platform/android-sdk/licenses/android-sdk-license || true
-          echo "d56f5187479451eabf01fb78af6dfcb131a6481e" > $HOME/.buildozer/android/platform/android-sdk/licenses/android-sdk-preview-license || true
-          cat ~/.android/licenses/android-sdk-license || true
+          cp ~/.android/licenses/* $HOME/.buildozer/android/platform/android-sdk/licenses/ 2>/dev/null || true
       - name: Build APK
-        run: buildozer -v android debug
+        run: |
+          # First attempt - buildozer will download SDK
+          set +e
+          buildozer -v android debug
+          EXIT_CODE=$?
+          if [ $EXIT_CODE -ne 0 ]; then
+            echo "First build failed with $EXIT_CODE, trying manual sdkmanager license fix..."
+            SDKMANAGER=$(find $HOME/.buildozer -name "sdkmanager" -type f 2>/dev/null | head -1)
+            if [ -n "$SDKMANAGER" ]; then
+              echo "Found sdkmanager at $SDKMANAGER"
+              SDK_DIR=$(dirname $(dirname $SDKMANAGER))/../..
+              SDK_DIR=$(realpath $SDK_DIR 2>/dev/null || echo $HOME/.buildozer/android/platform/android-sdk)
+              echo "SDK dir: $SDK_DIR"
+              mkdir -p $SDK_DIR/licenses
+              printf "8933bad161af4178b1185d1a37fbf41ea5269c55\nd56f5187479451eabf01fb78af6dfcb131a6481e\n24333f8a63b6825ea9c5514f83c2829b004d1fee\n601085b94cd77f0b54ff86406957099ebe79c4d6\n" > $SDK_DIR/licenses/android-sdk-license
+              printf "8933bad161af4178b1185d1a37fbf41ea5269c55\nd56f5187479451eabf01fb78af6dfcb131a6481e\n24333f8a63b6825ea9c5514f83c2829b004d1fee\n601085b94cd77f0b54ff86406957099ebe79c4d6\n" > $SDK_DIR/licenses/android-sdk-preview-license
+              echo "Licenses installed, accepting via sdkmanager..."
+              yes | $SDKMANAGER --licenses || true
+              yes | $SDKMANAGER --sdk_root=$SDK_DIR "build-tools;37.0.0" "build-tools;34.0.0" "platform-tools" || true
+              echo "Retrying buildozer..."
+              buildozer -v android debug
+              EXIT_CODE=$?
+            else
+              echo "sdkmanager not found, retrying buildozer directly..."
+              buildozer -v android debug
+              EXIT_CODE=$?
+            fi
+          fi
+          exit $EXIT_CODE
       - uses: actions/upload-artifact@v7
         with:
           name: AirMouse-APK
