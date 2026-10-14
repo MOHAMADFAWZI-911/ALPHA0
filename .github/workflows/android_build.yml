@@ -20,6 +20,12 @@ jobs:
         with:
           distribution: temurin
           java-version: "17"
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+      - name: Install Android SDK packages
+        run: |
+          yes | sdkmanager --licenses
+          sdkmanager "platform-tools" "platforms;android-33" "build-tools;37.0.0"
       - uses: actions/setup-python@v7
         with:
           python-version: "3.11"
@@ -27,15 +33,10 @@ jobs:
         run: |
           pip install --upgrade pip
           pip install buildozer cython==0.29.36
-      - name: Accept Android SDK licenses
-        run: |
-          mkdir -p ~/.android/licenses
-          printf "8933bad161af4178b1185d1a37fbf41ea5269c55\nd56f5187479451eabf01fb78af6dfcb131a6481e\n24333f8a63b6825ea9c5514f83c2829b004d1fee\n601085b94cd77f0b54ff86406957099ebe79c4d6\n" > ~/.android/licenses/android-sdk-license
-          printf "8933bad161af4178b1185d1a37fbf41ea5269c55\nd56f5187479451eabf01fb78af6dfcb131a6481e\n24333f8a63b6825ea9c5514f83c2829b004d1fee\n601085b94cd77f0b54ff86406957099ebe79c4d6\n" > ~/.android/licenses/android-sdk-preview-license
-          cat ~/.android/licenses/android-sdk-license
       - name: Build APK
         run: |
           set -euxo pipefail
+          export ANDROIDSDK="$ANDROID_HOME"
           buildozer -v android debug
       - uses: actions/upload-artifact@v7
         with:
