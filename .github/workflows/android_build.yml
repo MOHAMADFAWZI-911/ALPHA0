@@ -10,12 +10,12 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Install dependencies
         run: |
           sudo apt update
           sudo apt install -y python3-dev python3-pip openjdk-17-jdk unzip libffi-dev libssl-dev git zip zlib1g-dev autoconf automake libtool pkg-config
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v7
         with:
           python-version: "3.11"
       - name: Install Buildozer
@@ -24,7 +24,7 @@ jobs:
           pip install buildozer cython==0.29.36
       - name: Build APK
         run: buildozer -v android debug
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: AirMouse-APK
           path: bin/*.apk
