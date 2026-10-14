@@ -8,6 +8,7 @@ requirements = python3, kivy, plyer, pyjnius
 orientation = portrait
 fullscreen = 1
 android.permissions = INTERNET, ACCESS_NETWORK_STATE
+android.sdk_path = /usr/local/lib/android/sdk
 android.api = 33
 android.minapi = 21
 android.build_tools_version = 34.0.0
