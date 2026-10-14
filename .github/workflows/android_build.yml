@@ -33,8 +33,6 @@ jobs:
           printf "8933bad161af4178b1185d1a37fbf41ea5269c55\nd56f5187479451eabf01fb78af6dfcb131a6481e\n24333f8a63b6825ea9c5514f83c2829b004d1fee\n601085b94cd77f0b54ff86406957099ebe79c4d6\n" > ~/.android/licenses/android-sdk-license
           printf "8933bad161af4178b1185d1a37fbf41ea5269c55\nd56f5187479451eabf01fb78af6dfcb131a6481e\n24333f8a63b6825ea9c5514f83c2829b004d1fee\n601085b94cd77f0b54ff86406957099ebe79c4d6\n" > ~/.android/licenses/android-sdk-preview-license
           cat ~/.android/licenses/android-sdk-license
-          mkdir -p $HOME/.buildozer/android/platform/android-sdk/licenses
-          cp ~/.android/licenses/* $HOME/.buildozer/android/platform/android-sdk/licenses/ 2>/dev/null || true
       - name: Build APK
         run: |
           set -euxo pipefail
