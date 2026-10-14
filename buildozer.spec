@@ -1,4 +1,4 @@
-﻿[app]
+[app]
 title = AirMouse
 package.name = airmouse
 package.domain = org.example.airmouse
