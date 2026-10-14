@@ -9,6 +9,8 @@ fullscreen = 1
 android.permissions = INTERNET, ACCESS_NETWORK_STATE
 android.api = 33
 android.minapi = 21
+android.build_tools_version = 34.0.0
+android.accept_sdk_license_agreements = True
 p4a.branch = master
 presplash.filename = assets/presplash.png
 icon.filename = assets/icon.png
@@ -23,5 +25,4 @@ debug = 1
 [android]
 android.archs = arm64-v8a, armeabi-v7a
 android.ndk = 25b
-android.accept_sdk_license_agreements = True
 android.aab = False
