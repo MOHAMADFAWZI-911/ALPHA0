@@ -20,12 +20,14 @@ jobs:
         with:
           distribution: temurin
           java-version: "17"
-      - name: Set up Android SDK
-        uses: android-actions/setup-android@v3
       - name: Install Android SDK packages
         run: |
-          yes | sdkmanager --licenses
-          sdkmanager "platform-tools" "platforms;android-33" "build-tools;37.0.0"
+          SDKMANAGER="$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager"
+          if [ ! -x "$SDKMANAGER" ]; then
+            SDKMANAGER="$(command -v sdkmanager)"
+          fi
+          yes | "$SDKMANAGER" --licenses
+          "$SDKMANAGER" "platform-tools" "platforms;android-33" "build-tools;37.0.0"
       - uses: actions/setup-python@v7
         with:
           python-version: "3.11"
@@ -37,6 +39,7 @@ jobs:
         run: |
           set -euxo pipefail
           export ANDROIDSDK="$ANDROID_HOME"
+          export ANDROID_SDK_ROOT="$ANDROID_HOME"
           buildozer -v android debug
       - uses: actions/upload-artifact@v7
         with:
