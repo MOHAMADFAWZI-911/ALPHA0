@@ -27,7 +27,7 @@ jobs:
             SDKMANAGER="$(command -v sdkmanager)"
           fi
           yes | "$SDKMANAGER" --licenses
-          "$SDKMANAGER" "platform-tools" "platforms;android-33" "build-tools;37.0.0"
+          "$SDKMANAGER" "platform-tools" "platforms;android-33" "build-tools;34.0.0"
           mkdir -p "$ANDROID_HOME/tools/bin"
           ln -sf "$SDKMANAGER" "$ANDROID_HOME/tools/bin/sdkmanager"
       - uses: actions/setup-python@v7
