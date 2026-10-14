@@ -23,5 +23,5 @@ debug = 1
 [android]
 android.archs = arm64-v8a, armeabi-v7a
 android.ndk = 25b
-android.accept_sdk_license_agreements = True
+android.accept_sdk_license = True
 android.aab = False
