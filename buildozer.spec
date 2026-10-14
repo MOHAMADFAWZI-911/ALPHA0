@@ -2,6 +2,7 @@
 title = AirMouse
 package.name = airmouse
 package.domain = org.example.airmouse
+source.dir = .
 source.include_exts = py,png,jpg,kv
 requirements = python3, kivy, plyer, pyjnius
 orientation = portrait
@@ -16,7 +17,6 @@ presplash_color = #FFFFFF
 version = 1.1.0
 
 [buildozer]
-source.dir = .
 copy_to_bin = False
 debug = 1
 
