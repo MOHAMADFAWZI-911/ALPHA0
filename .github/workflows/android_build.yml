@@ -28,6 +28,8 @@ jobs:
           fi
           yes | "$SDKMANAGER" --licenses
           "$SDKMANAGER" "platform-tools" "platforms;android-33" "build-tools;37.0.0"
+          mkdir -p "$ANDROID_HOME/tools/bin"
+          ln -sf "$SDKMANAGER" "$ANDROID_HOME/tools/bin/sdkmanager"
       - uses: actions/setup-python@v7
         with:
           python-version: "3.11"
